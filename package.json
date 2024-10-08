@@ -1,0 +1,57 @@
+{
+  "name": "mfweb",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc -b && vite build",
+    "lint": "eslint .",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@codemirror/lang-html": "^6.4.9",
+    "@coreui/coreui": "^5.0.0",
+    "@coreui/react": "^5.0.0",
+    "@lezer/highlight": "^1.2.0",
+    "@mantine/core": "^7.13.2",
+    "@mantine/hooks": "^7.13.2",
+    "@mantinex/dev-icons": "^1.0.2",
+    "@tabler/icons-react": "^3.19.0",
+    "@uiw/codemirror-themes": "^4.22.2",
+    "@uiw/react-codemirror": "^4.22.2",
+    "firebase": "^10.14.0",
+    "gpt-tokenizer": "^2.4.1",
+    "mjml-browser": "^4.15.3",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "react-resizable-layout": "^0.7.2",
+    "react-resizable-panels": "^2.1.4",
+    "react-responsive": "^10.0.0",
+    "react-router-dom": "^6.26.2",
+    "resizable-panes-react": "^6.0.26"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.9.0",
+    "@types/mjml": "^4.7.4",
+    "@types/mjml-browser": "^4.15.0",
+    "@types/react": "^18.3.3",
+    "@types/react-dom": "^18.3.0",
+    "@vitejs/plugin-react-swc": "^3.5.0",
+    "eslint": "^9.9.0",
+    "eslint-plugin-react-hooks": "^5.1.0-rc.0",
+    "eslint-plugin-react-refresh": "^0.4.9",
+    "globals": "^15.9.0",
+    "postcss-preset-mantine": "^1.17.0",
+    "postcss-simple-vars": "^7.0.1",
+    "typescript": "^5.5.3",
+    "typescript-eslint": "^8.0.1",
+    "vite": "^5.4.1"
+  },
+  "optionalDependencies": {
+    "@rollup/rollup-linux-x64-gnu": "4.9.5"
+  },
+  "resolutions": {
+    "@codemirror/state": "^6.4.1"
+  }
+}

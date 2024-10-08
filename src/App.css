@@ -1,0 +1,47 @@
+body {
+  margin: 0;
+  height: 100vh;
+  width: 100vw;
+  background-color: #fff;
+  color: #333;
+}
+
+* {
+  font-family: 'Montserrat', sans-serif;
+}
+
+#root {
+  height: 100%;
+}
+
+#app {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+
+.ctabtn {
+  background-color: #587752;
+  color: #fff;
+  border: none;
+  padding: 10px 15px;
+  border-radius: 100px;
+  cursor: pointer;
+  font-family: Roboto, sans-serif;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  display: inline-flex;
+  height: 38px;
+  margin: 15px 0 0 0;
+}
+
+
+/* dark mode, turn body to dark gray */
+@media (prefers-color-scheme: dark) {
+  body {
+    background-color: #333;
+    color: #fff;
+  }
+}
