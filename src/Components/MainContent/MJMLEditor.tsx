@@ -814,7 +814,7 @@ function MJMLEditor() {
     const generateMjml = async (e: any) => {
         e.preventDefault();
         setGenerating(true);
-        let endpoint = 'https://mailframesnode-650411795943.us-central1.run.app/api/promptsremaining/api/generate'
+        let endpoint = 'https://mailframesnode-650411795943.us-central1.run.app/api/generate'
         let data = { prompt: promptValue }
         const token = await user?.getIdToken(true)
 
