@@ -21,7 +21,7 @@ function MainContent() {
     const ref = useRef<ImperativePanelHandle>(null);
 
     useEffect(() => {
-        fetch('http://localhost:3000/api/convert', {
+        fetch('https://mailframesnode-650411795943.us-central1.run.app/api/convert', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
