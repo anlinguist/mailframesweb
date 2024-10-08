@@ -179,7 +179,7 @@ export default function Header({ setLoginModalOpened }: any) {
           hiddenFrom="sm"
           zIndex={1000000}
         >
-          <ScrollArea style={{ textAlign: "center" }} h={`calc(100vh - ${rem(80)})`} mx="-md">
+          <ScrollArea style={{ textAlign: "center" }} h={`calc(100dvh - ${rem(80)})`} mx="-md">
             <Divider my="sm" />
 
             {
