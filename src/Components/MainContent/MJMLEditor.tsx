@@ -727,7 +727,7 @@ function MJMLEditor() {
 
     const updatePromptsRemaining = async () => {
 
-        let endpoint = 'https://mailframesnode-650411795943.us-central1.run.app/api/promptsremaining/api/promptsremaining'
+        let endpoint = 'https://mailframesnode-650411795943.us-central1.run.app/api/promptsremaining'
         const token = await user?.getIdToken(true)
         let raw = await fetch(endpoint, {
             method: 'GET',
