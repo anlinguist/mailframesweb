@@ -727,7 +727,7 @@ function MJMLEditor() {
 
     const updatePromptsRemaining = async () => {
 
-        let endpoint = 'http://localhost:8080/api/promptsremaining'
+        let endpoint = 'https://mailframesnode-650411795943.us-central1.run.app/api/promptsremaining/api/promptsremaining'
         const token = await user?.getIdToken(true)
         let raw = await fetch(endpoint, {
             method: 'GET',
@@ -814,7 +814,7 @@ function MJMLEditor() {
     const generateMjml = async (e: any) => {
         e.preventDefault();
         setGenerating(true);
-        let endpoint = 'http://localhost:8080/api/generate'
+        let endpoint = 'https://mailframesnode-650411795943.us-central1.run.app/api/promptsremaining/api/generate'
         let data = { prompt: promptValue }
         const token = await user?.getIdToken(true)
 
