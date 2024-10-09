@@ -5,6 +5,7 @@ import { Button, ColorSchemeScript, MantineColorsTuple, MantineProvider, createT
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import RootLayout from './RootLayout';
 import { AuthProvider } from './Components/Contexts/AuthContext';
+import Header from './Components/Header/Header';
 // import { authLoader } from './loaders';
 // import Settings from './Components/Settings';
 // import Templates from './Components/Templates';
@@ -56,17 +57,11 @@ export const router = createBrowserRouter([
     children: [
       {
         index: true,
-        element: <MainContent />,
+        element: <>
+          <Header />
+        <MainContent />
+      </>,
       },
-      // {
-      //   path: 'templates',
-      //   element: <Templates />,
-      // },
-      // {
-      //   path: 'settings',
-      //   element: <Settings />,
-      //   loader: authLoader, // Protect this route
-      // },
     ],
   },
 ]);

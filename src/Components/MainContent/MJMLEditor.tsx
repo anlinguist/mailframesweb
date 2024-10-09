@@ -662,7 +662,7 @@ function mjmlLinter(view: any) {
 }
 
 function MJMLEditor() {
-    const { setLoginModalOpened, passedValue } = useOutletContext<{ setLoginModalOpened: React.Dispatch<React.SetStateAction<boolean>>, passedValue: any }>();
+    const { passedValue } = useOutletContext<{ passedValue: any }>();
     const { user } = useAuth();
     const [isHovered, setIsHovered] = useState(false);
 
@@ -893,7 +893,7 @@ function MJMLEditor() {
                                     <Alert style={{ width: "80%" }} variant="light" color="mfgreen.8" radius="md" title="" icon={alertIcon}>
                                         To use AI, you'll need to sign in - it's free!
                                     </Alert>
-                                    <LoginButton onClick={(() => { setLoginModalOpened(true) })} variant={"filled"} />
+                                    <LoginButton variant={"filled"} />
                                 </>
                             }
                             {

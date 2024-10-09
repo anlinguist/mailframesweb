@@ -57,14 +57,13 @@ const tabs: Record<string, Tab> = {
   // }
 }
 
-export default function Header({ setLoginModalOpened }: any) {
+export default function Header() {
   const { user }: { user: User | null } = useAuth();
   const navigate = useNavigate();
 
   const [activeTab, setActiveTab] = useState(location.pathname);
   const [userMenuOpened, setUserMenuOpened] = useState(false);
   const [drawerOpened, { toggle: toggleDrawer, close: closeDrawer }] = useDisclosure(false);
-
 
   useEffect(() => {
     setActiveTab(location.pathname);
@@ -137,7 +136,6 @@ export default function Header({ setLoginModalOpened }: any) {
               <LoginButton
                 visibleFrom='xs'
                 onClick={() => {
-                  setLoginModalOpened(true);
                   closeDrawer();
                 }}
               />
@@ -234,7 +232,6 @@ export default function Header({ setLoginModalOpened }: any) {
               !user &&
                 <LoginButton 
                 onClick={() => {
-                  setLoginModalOpened(true);
                   closeDrawer();
                 }} />
             }
