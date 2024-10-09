@@ -26,6 +26,33 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     return () => unsubscribe();
   }, []);
 
+  useEffect(() => {
+    if (loading) return;
+    if (user) {
+      user.getIdToken().then(function(token) {
+        return fetch('http://localhost:8080/api/generateCustomToken', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`,
+          },
+          body: JSON.stringify({ token }),
+        });
+      })
+      .then(response => response.json())
+      .then(data => {
+        const customToken = data.customToken;
+        window.postMessage({ type: 'AUTH_MESSAGE', customToken }, '*');
+      })
+      .catch(function(error) {
+        // Handle error
+        console.error('Error obtaining custom token:', error);
+      });
+    } else {
+      window.postMessage({ type: 'AUTH_MESSAGE', signOut: true }, '*');
+    }
+  }, [user, loading]);
+
   return (
     <AuthContext.Provider value={{ user, loading }}>
       {children}
