@@ -30,7 +30,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     if (loading) return;
     if (user) {
       user.getIdToken().then(function(token) {
-        return fetch('http://localhost:8080/api/generateCustomToken', {
+        return fetch('https://mailframesnode-650411795943.us-central1.run.app/api/generateCustomToken', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
