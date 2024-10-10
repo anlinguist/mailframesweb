@@ -49,7 +49,7 @@ const initialContent = `<mjml>
     <mj-section full-width="full-width" background-color="#587752" padding-bottom="0">
       <mj-column width="100%">
         <mj-image
-          src="/mflogo_white.svg"
+          src="https://mailframes.com/mflogo_white.svg"
           width="150px"
           alt="Mail Frames Logo"
           padding="20px 0"
