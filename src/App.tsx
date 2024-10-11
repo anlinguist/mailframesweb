@@ -69,8 +69,8 @@ export default App
 
 function MiddleApp() {
   const { user } = useAuth();
-  const CustomTemplatesLoader = async (request: any) => {
-    return templatesLoader({ request }, user);
+  const CustomTemplatesLoader = async () => {
+    return templatesLoader(user);
   };
   const router = createBrowserRouter([
     {
