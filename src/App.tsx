@@ -6,7 +6,11 @@ import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import RootLayout from './RootLayout';
 import { AuthProvider, useAuth } from './Components/Contexts/AuthContext';
 import Templates from './Components/Templates';
-import { templatesLoader } from './loaders';
+import { aboutLoader, templatesLoader } from './loaders';
+import About from './Components/About';
+import { Notifications } from '@mantine/notifications';
+import '@mantine/notifications/styles.css';
+
 // import { authLoader } from './loaders';
 // import Settings from './Components/Settings';
 // import Templates from './Components/Templates';
@@ -60,6 +64,7 @@ function App() {
         <AuthProvider>
           <MiddleApp />
         </AuthProvider>
+        <Notifications autoClose={false} />
       </MantineProvider>
     </>
   )
@@ -83,9 +88,14 @@ function MiddleApp() {
         },
         {
           path: 'templates',
-          element: <Templates />, // Templates view also has Header present
-          loader: CustomTemplatesLoader, // You can add loader and actions here
+          element: <Templates />,
+          loader: CustomTemplatesLoader,
         },
+        {
+          path: 'about',
+          element: <About />,
+          loader: aboutLoader,
+        }
       ],
     },
   ]);

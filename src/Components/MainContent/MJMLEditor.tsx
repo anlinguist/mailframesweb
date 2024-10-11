@@ -24,6 +24,7 @@ import * as prettier from "prettier/standalone";
 import * as parserHtml from 'prettier/parser-html';
 import { useDisclosure } from "@mantine/hooks";
 import SignInUI from "../SignInUI";
+import { notifications } from "@mantine/notifications";
 
 declare global {
     interface Window {
@@ -782,7 +783,8 @@ function MJMLEditor() {
                 { merge: true }
             )
                 .then(() => {
-                    alert('Template saved successfully.');
+                    savedTemplate();
+                    close();
                 })
                 .catch((error) => {
                     console.error('Error saving template:', error);
@@ -991,9 +993,19 @@ function MJMLEditor() {
         await handleSaveAs(newTemplateName.trim());
         setIsSaving(false);
         setShowSaveAsInput(false);
+        savedTemplate();
         setNewTemplateName('');
         close();
     };
+
+    const savedTemplate = () => {
+        notifications.show({
+            position: 'bottom-right',
+            title: 'Message sent!',
+            message: 'Your template was saved!',
+            color: 'mfgreen.8',
+        });
+    }
 
     const handleCancelSaveAs = () => {
         setShowSaveAsInput(false);
