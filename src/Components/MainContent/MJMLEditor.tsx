@@ -1010,31 +1010,36 @@ function MJMLEditor() {
                     <SignInUI message={"To save templates, you'll need to sign in."} callback={null} />
                 }
                 {
-                    userOwnsTemplate &&
+                    user &&
                     <>
-                        <Text fw={500}>Save Options</Text>
-                        <Button fullWidth 
-                            color="mfgreen.8" onClick={handleSave}>
-                            Save Template
-                        </Button>
-                        <Button
-                            fullWidth
-                            color="mfgreen.8"
-                            variant="outline"
-                            onClick={handleSaveAsClick}
-                        >
-                            Save As New Template
-                        </Button>
-                    </>
-                }
-                {
-                    !userOwnsTemplate &&
-                    <>
-                        <Text fw={500}>Save Template</Text>
-                        <Button 
-                            color="mfgreen.8" fullWidth onClick={handleSaveAsClick}>
-                            Save As New Template
-                        </Button>
+                        {
+                            userOwnsTemplate &&
+                            <>
+                                <Text fw={500}>Save Options</Text>
+                                <Button fullWidth
+                                    color="mfgreen.8" onClick={handleSave}>
+                                    Save Template
+                                </Button>
+                                <Button
+                                    fullWidth
+                                    color="mfgreen.8"
+                                    variant="outline"
+                                    onClick={handleSaveAsClick}
+                                >
+                                    Save As New Template
+                                </Button>
+                            </>
+                        }
+                        {
+                            !userOwnsTemplate &&
+                            <>
+                                <Text fw={500}>Save Template</Text>
+                                <Button
+                                    color="mfgreen.8" fullWidth onClick={handleSaveAsClick}>
+                                    Save As New Template
+                                </Button>
+                            </>
+                        }
                     </>
                 }
 
