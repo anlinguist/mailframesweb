@@ -44,8 +44,13 @@ const initialContent = `<mjml>
         color: #888888;
       }
     </mj-style>
+    <mj-style>
+      .email-body table {
+        table-layout: fixed;
+      }
+    </mj-style>
   </mj-head>
-  <mj-body background-color="#E7E7E7" width="600px">
+  <mj-body css-class="email-body" background-color="#E7E7E7" width="600px">
     <mj-section full-width="full-width" background-color="#587752" padding-bottom="0">
       <mj-column width="100%">
         <mj-image
@@ -58,7 +63,7 @@ const initialContent = `<mjml>
     </mj-section>
     <mj-wrapper padding-top="0" padding-bottom="0" css-class="body-section">
       <mj-section background-color="#ffffff" padding-left="15px" padding-right="15px">
-        <mj-column width="100%">
+        <mj-column css-class="testClass" width="100%">
           <mj-text color="#212b35" font-weight="bold" font-size="20px">
             Welcome to Mail Frames
           </mj-text>
@@ -107,7 +112,6 @@ const initialContent = `<mjml>
             font-size="17px"
             font-weight="bold"
             href="https://mailframes.com/signup"
-            width="300px"
           >
             Sign Up for Free
           </mj-button>

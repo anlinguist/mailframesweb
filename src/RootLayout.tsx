@@ -7,7 +7,7 @@ import Header from './Components/Header/Header';
 import { useMediaQuery } from 'react-responsive';
 
 const RootLayout: React.FC = () => {
-    const isMobile = useMediaQuery({ query: '(max-width: 500px)' });
+    const isMobile = useMediaQuery({ query: '(max-width: 749px)' });
     const navigation = useNavigation();
     const isLoading = navigation.state === "loading";
     const [loginModalOpened, setLoginModalOpened] = useState(false);
