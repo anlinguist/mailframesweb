@@ -3,14 +3,14 @@ import ContentPreview from "./ContentPreview";
 import MJMLEditor from "./MJMLEditor";
 import { useEffect, useRef, useState } from "react";
 import './MainContent.css';
-import { useMediaQuery } from 'react-responsive';
 import useModal from "../Modals/useModal";
 import Modal from "../Modals/Modal";
 import { useEditor } from "../Contexts/useEditor";
 import { Button } from "@mantine/core";
+import { useOutletContext } from "react-router-dom";
 
 function MainContent() {
-    const isMobile = useMediaQuery({ query: '(max-width: 500px)' });
+    const { isMobile }: any = useOutletContext();
     const { value } = useEditor() as any;
     const [clickCount, setClickCount] = useState(0);
     const [panelSize, setPanelSize] = useState<number>(50);

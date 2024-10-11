@@ -2,7 +2,6 @@
     height: 100%;
     display: flex;
     flex-direction: row;
-    margin: 20px;
     overflow: auto;
     box-sizing: border-box;
 }
@@ -75,6 +74,10 @@
 
 .content-title {
     text-align: center;
+}
+
+.editor-title-bar .content-title {
+    flex: 1;
 }
 
 .generatemjml {

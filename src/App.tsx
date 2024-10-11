@@ -4,8 +4,9 @@ import '@mantine/core/styles.css';
 import { Button, ColorSchemeScript, MantineColorsTuple, MantineProvider, createTheme } from '@mantine/core';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import RootLayout from './RootLayout';
-import { AuthProvider } from './Components/Contexts/AuthContext';
-import Header from './Components/Header/Header';
+import { AuthProvider, useAuth } from './Components/Contexts/AuthContext';
+import Templates from './Components/Templates';
+import { templatesLoader } from './loaders';
 // import { authLoader } from './loaders';
 // import Settings from './Components/Settings';
 // import Templates from './Components/Templates';
@@ -50,21 +51,6 @@ const theme = createTheme({
   },
 });
 
-export const router = createBrowserRouter([
-  {
-    path: '/',
-    element: <RootLayout />,
-    children: [
-      {
-        index: true,
-        element: <>
-          <Header />
-        <MainContent />
-      </>,
-      },
-    ],
-  },
-]);
 
 function App() {
   return (
@@ -72,7 +58,7 @@ function App() {
       <ColorSchemeScript defaultColorScheme="auto" />
       <MantineProvider defaultColorScheme='auto' theme={theme}>
         <AuthProvider>
-          <RouterProvider router={router} />
+          <MiddleApp />
         </AuthProvider>
       </MantineProvider>
     </>
@@ -80,3 +66,30 @@ function App() {
 }
 
 export default App
+
+function MiddleApp() {
+  const { user } = useAuth();
+  const CustomTemplatesLoader = async (request: any) => {
+    return templatesLoader({ request }, user);
+  };
+  const router = createBrowserRouter([
+    {
+      path: '/',
+      element: <RootLayout />,
+      children: [
+        {
+          index: true,
+          element: <MainContent />
+        },
+        {
+          path: 'templates',
+          element: <Templates />, // Templates view also has Header present
+          loader: CustomTemplatesLoader, // You can add loader and actions here
+        },
+      ],
+    },
+  ]);
+  return (
+    <RouterProvider router={router} />
+  )
+}

@@ -1,8 +1,6 @@
 import { Button } from '@mantine/core';
-import { useOutletContext } from 'react-router-dom';
 
 function LoginButton(props: any) {
-    const { setLoginModalOpened } = useOutletContext<{ setLoginModalOpened: React.Dispatch<React.SetStateAction<boolean>>, passedValue: any }>();
 
     return (
         <Button
@@ -15,7 +13,6 @@ function LoginButton(props: any) {
                 if (props.onClick) {
                     props.onClick();
                 }
-                setLoginModalOpened(true);
             }}
         >
             Login

@@ -1,7 +1,8 @@
 // loaders.ts
 import { redirect } from 'react-router-dom';
 import { auth } from './services/firebase';
-import { getFirestore, collection, getDocs } from 'firebase/firestore';
+import { collection, getDocs, getFirestore, query, where } from 'firebase/firestore';
+import { User } from 'firebase/auth';
 
 export async function authLoader() {
   const user = auth.currentUser;
@@ -23,14 +24,30 @@ export async function authLoader() {
   }
 }
 
-export const templatesLoader = async () => {
+
+export const templatesLoader = async ({ request }: any, user: User | null) => {
   const db = getFirestore();
-  const templatesData: any[] = [];
+  const templatesRef = collection(db, 'templates');
+  let templatesList = [];
 
-  const defaultTemplatesSnapshot = await getDocs(collection(db, 'templates'));
-  defaultTemplatesSnapshot.forEach((doc) => {
-    templatesData.push({ id: doc.id, ...doc.data(), isUserTemplate: false });
-  });
+  if (user) {
+    const q = query(templatesRef, where('author', 'in', ['default', user.uid]));
+    const querySnapshot = await getDocs(q);
+    templatesList = querySnapshot.docs.map(doc => ({
+      id: doc.id,
+      ...doc.data(),
+    }));
+  } else {
+    const q = query(templatesRef, where('author', '==', 'default'));
+    const querySnapshot = await getDocs(q);
+    templatesList = querySnapshot.docs.map(doc => ({
+      id: doc.id,
+      ...doc.data(),
+    }));
+  }
 
-  return { templates: templatesData };
+  const mfTemplates = templatesList.filter((template: any) => template.author === 'default');
+  const userTemplates = templatesList.filter((template: any) => template.author !== 'default');
+
+  return { mfTemplates, userTemplates };
 };

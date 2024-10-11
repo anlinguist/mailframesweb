@@ -45,11 +45,11 @@ const tabs: Record<string, Tab> = {
     url: '/',
     protected: false,
   },
-  // templates: {
-  //   name: 'Templates',
-  //   url: '/templates',
-  //   protected: false,
-  // },
+  templates: {
+    name: 'Templates',
+    url: '/templates',
+    protected: false,
+  },
   // settings: {
   //   name: 'Settings',
   //   url: '/settings',
@@ -57,7 +57,7 @@ const tabs: Record<string, Tab> = {
   // }
 }
 
-export default function Header() {
+export default function Header({setLoginModalOpened}: any) {
   const { user }: { user: User | null } = useAuth();
   const navigate = useNavigate();
 
@@ -136,6 +136,7 @@ export default function Header() {
               <LoginButton
                 visibleFrom='xs'
                 onClick={() => {
+                  setLoginModalOpened(true);
                   closeDrawer();
                 }}
               />
@@ -232,6 +233,7 @@ export default function Header() {
               !user &&
                 <LoginButton 
                 onClick={() => {
+                  setLoginModalOpened(true);
                   closeDrawer();
                 }} />
             }

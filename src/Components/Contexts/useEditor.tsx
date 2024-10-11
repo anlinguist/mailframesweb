@@ -185,9 +185,10 @@ const initialContent = `<mjml>
 
 export const EditorProvider = ({ children }: any) => {
   const [value, setValue] = useState(initialContent);
+  const setDefaultValue = () => setValue(initialContent);
 
   return (
-    <EditorContext.Provider value={{ value, setValue }}>
+    <EditorContext.Provider value={{ value, setValue, setDefaultValue }}>
       {children}
     </EditorContext.Provider>
   );
