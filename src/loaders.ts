@@ -25,7 +25,7 @@ export async function authLoader() {
 }
 
 
-export const templatesLoader = async ({ request }: any, user: User | null) => {
+export const templatesLoader = async (user: User | null) => {
   const db = getFirestore();
   const templatesRef = collection(db, 'templates');
   let templatesList = [];
