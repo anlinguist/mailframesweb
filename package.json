@@ -23,6 +23,7 @@
     "firebase": "^10.14.0",
     "gpt-tokenizer": "^2.4.1",
     "mjml-browser": "^4.15.3",
+    "prettier": "^3.3.3",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-resizable-layout": "^0.7.2",

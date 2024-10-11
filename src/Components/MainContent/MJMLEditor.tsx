@@ -10,14 +10,20 @@ import mjml2html from 'mjml-browser';
 import { useEditor } from "../Contexts/useEditor";
 import { EditorSelection } from '@codemirror/state';
 import { ImperativePanelHandle, Panel, PanelGroup, PanelResizeHandle } from "react-resizable-panels";
-import { Alert, Button, Paper, Textarea, Tooltip } from "@mantine/core";
-import { useOutletContext } from "react-router-dom";
+import { Alert, Button, Drawer, Group, Modal, Paper, Stack, Text, TextInput, Textarea, Tooltip } from "@mantine/core";
 import { useAuth } from "../Contexts/AuthContext";
 import LoginButton from "../LoginButton";
 import { IconInfoCircle } from "@tabler/icons-react";
 import {
     isWithinTokenLimit
 } from 'gpt-tokenizer'
+import { useLocation, useNavigate, useOutletContext } from "react-router-dom";
+import { addDoc, collection, doc, getDoc, setDoc } from "firebase/firestore";
+import { db } from "../../services/firebase";
+import * as prettier from "prettier/standalone";
+import * as parserHtml from 'prettier/parser-html';
+import { useDisclosure } from "@mantine/hooks";
+import SignInUI from "../SignInUI";
 
 declare global {
     interface Window {
@@ -662,9 +668,11 @@ function mjmlLinter(view: any) {
 }
 
 function MJMLEditor() {
-    const { passedValue } = useOutletContext<{ passedValue: any }>();
+    const { isMobile }: any = useOutletContext();
+    const [opened, { open, close }] = useDisclosure(false);
     const { user } = useAuth();
     const [isHovered, setIsHovered] = useState(false);
+    const [currentTemplate, setCurrentTemplate] = useState<any>(null);
 
     const handleMouseEnter = () => {
         setIsHovered(true);
@@ -674,7 +682,7 @@ function MJMLEditor() {
         setIsHovered(false);
     };
 
-    const { value, setValue } = useEditor() as any;
+    const { value, setValue, setDefaultValue } = useEditor() as any;
     const [isDarkMode, setIsDarkMode] = useState(false);
     const editorRef = useRef<any>(null);
     const [editorState, setEditorState] = useState<EditorState | null>(null);
@@ -684,23 +692,130 @@ function MJMLEditor() {
     const [promptsRemaining, setPromptsRemaining] = useState(0);
     const [overLimit, setOverLimit] = useState(false);
     const [exceededDailyLimit, setExceededDailyLimit] = useState(false);
-
     const [clickCount, setClickCount] = useState(0);
     const [previousPanelSize, setPreviousPanelSize] = useState<number>(30);
     const [isDragging, setIsDragging] = useState(false);
 
     const ref = useRef<ImperativePanelHandle>(null);
     const alertIcon = <IconInfoCircle />;
+    const location = useLocation();
+    const navigate = useNavigate();
+    const checkForTemplates = async () => {
+        if (!db) {
+            return;
+        }
+        const params = new URLSearchParams(location.search);
+        const templateId = params.get('templateId');
+
+        if (templateId) {
+            const docRef = doc(db, 'templates', templateId);
+            try {
+                let docSnapshot = await getDoc(docRef);
+                if (docSnapshot.exists()) {
+                    const templateData = docSnapshot.data();
+                    if (
+                        templateData.author === user?.uid ||
+                        templateData.author === 'default'
+                    ) {
+                        setCurrentTemplate({ id: docSnapshot.id, ...templateData });
+                        formatCode(templateData.mjml);
+                    } else {
+                        params.delete('templateId');
+                        navigate(
+                            {
+                                pathname: location.pathname,
+                                search: params.toString(),
+                            },
+                            { replace: true }
+                        );
+                        setCurrentTemplate(null);
+                    }
+                } else {
+                    params.delete('templateId');
+                    navigate(
+                        {
+                            pathname: location.pathname,
+                            search: params.toString(),
+                        },
+                        { replace: true }
+                    );
+                    setCurrentTemplate(null);
+                }
+            }
+            catch (error) {
+                console.error('Error fetching template:', error);
+                params.delete('templateId');
+                navigate(
+                    {
+                        pathname: location.pathname,
+                        search: params.toString(),
+                    },
+                    { replace: true }
+                );
+                setCurrentTemplate(null);
+            }
+        } else {
+            setCurrentTemplate(null);
+        }
+    };
+
+    useEffect(() => {
+        if (currentTemplate === null) {
+            setDefaultValue();
+        }
+    }, [currentTemplate]);
+
+    useEffect(() => {
+        checkForTemplates();
+    }, [location.search, user, db, navigate, location.pathname]);
+
+    useEffect(() => {
+        checkForTemplates();
+    }, []);
+
+    const handleSave = () => {
+        if (currentTemplate && user) {
+            const docRef = doc(db, 'templates', currentTemplate.id);
+            setDoc(
+                docRef,
+                { ...currentTemplate, mjml: value },
+                { merge: true }
+            )
+                .then(() => {
+                    alert('Template saved successfully.');
+                })
+                .catch((error) => {
+                    console.error('Error saving template:', error);
+                });
+        }
+    };
+
+    const handleSaveAs = async (name: string) => {
+        if (user) {
+            const newTemplate = {
+                mjml: value,
+                author: user.uid,
+                lastEdited: new Date(),
+                name: name,
+            };
+            const templatesRef = collection(db, 'templates');
+            let docRef = await addDoc(templatesRef, newTemplate)
+            const params = new URLSearchParams(location.search);
+            params.set('templateId', docRef.id);
+            navigate(
+                {
+                    pathname: location.pathname,
+                    search: params.toString(),
+                },
+                { replace: true }
+            );
+            setCurrentTemplate({ id: docRef.id, ...newTemplate });
+        }
+    };
 
     const onChange = (newValue: any) => {
         setValue(newValue);
     };
-
-    useEffect(() => {
-        if (passedValue) {
-            writeText(passedValue);
-        }
-    }, [passedValue]);
 
     useEffect(() => {
         const darkModeMediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
@@ -719,11 +834,18 @@ function MJMLEditor() {
     }, []);
 
     useEffect(() => {
-        // if user changes, update the prompts remaining
         if (user) {
             updatePromptsRemaining();
         }
     }, [user]);
+
+    const formatCode = async (code: any) => {
+        const formatted = await prettier.format(code, {
+            parser: 'html',
+            plugins: [parserHtml],
+        });
+        setValue(formatted);
+    };
 
     const updatePromptsRemaining = async () => {
 
@@ -853,9 +975,94 @@ function MJMLEditor() {
             }
         }
     };
+    const [showSaveAsInput, setShowSaveAsInput] = useState(false);
+    const [newTemplateName, setNewTemplateName] = useState('');
+    const [isSaving, setIsSaving] = useState(false);
+
+    const handleSaveAsClick = () => {
+        setShowSaveAsInput(true);
+    };
+
+    const handleConfirmSaveAs = async () => {
+        if (!newTemplateName.trim()) {
+            return;
+        }
+        setIsSaving(true);
+        await handleSaveAs(newTemplateName.trim());
+        setIsSaving(false);
+        setShowSaveAsInput(false);
+        setNewTemplateName('');
+        close();
+    };
+
+    const handleCancelSaveAs = () => {
+        setShowSaveAsInput(false);
+        setNewTemplateName('');
+    };
+
+    const userOwnsTemplate = user && currentTemplate?.author === user.uid;
 
     return (
         <>
+            <Drawer position={isMobile ? "bottom" : "left"} opened={opened} onClose={close}>
+                {
+                    !user &&
+                    <SignInUI message={"To save templates, you'll need to sign in."} callback={null} />
+                }
+                {
+                    userOwnsTemplate &&
+                    <>
+                        <Text fw={500}>Save Options</Text>
+                        <Button fullWidth 
+                            color="mfgreen.8" onClick={handleSave}>
+                            Save Template
+                        </Button>
+                        <Button
+                            fullWidth
+                            color="mfgreen.8"
+                            variant="outline"
+                            onClick={handleSaveAsClick}
+                        >
+                            Save As New Template
+                        </Button>
+                    </>
+                }
+                {
+                    !userOwnsTemplate &&
+                    <>
+                        <Text fw={500}>Save Template</Text>
+                        <Button 
+                            color="mfgreen.8" fullWidth onClick={handleSaveAsClick}>
+                            Save As New Template
+                        </Button>
+                    </>
+                }
+
+            </Drawer>
+            <Modal
+                opened={showSaveAsInput}
+                onClose={handleCancelSaveAs}
+                title="Save As New Template"
+                centered
+            >
+                <Stack>
+                    <TextInput
+                        label="Template Name"
+                        placeholder="Enter template name"
+                        value={newTemplateName}
+                        onChange={(event) => setNewTemplateName(event.currentTarget.value)}
+                        required
+                    />
+                    <Group justify="center">
+                        <Button color="mfgreen.8" variant="default" onClick={handleCancelSaveAs}>
+                            Cancel
+                        </Button>
+                        <Button color="mfgreen.8" onClick={handleConfirmSaveAs} loading={isSaving}>
+                            Save
+                        </Button>
+                    </Group>
+                </Stack>
+            </Modal>
             <PanelGroup direction="vertical" style={{ overflow: 'clip' }}>
                 <Panel
                     ref={ref}
@@ -922,7 +1129,7 @@ function MJMLEditor() {
                                 input: { flex: "1" },
                             }}
                         />
-                        <Tooltip 
+                        <Tooltip
                             withArrow={true}
                             label={overLimit ? "You've exceeded the token limit of 500 tokens." : "Prompt cannot be empty."}
                             // @ts-ignore
@@ -942,15 +1149,16 @@ function MJMLEditor() {
                         </Tooltip>
                     </form>
                 </Panel>
-
-
                 <PanelResizeHandle
                     className={`panel-separator-horiz${isDragging ? ' active' : ''}`}
                     onClick={trackDoubleClick}
                     onDragging={handleDragging}
                 />
                 <Panel defaultSize={70} minSize={30} style={{ display: "flex", flexDirection: "column" }}>
-                    <h2 className="content-title">Editor</h2>
+                    <div className="editor-title-bar">
+                        <h2 className="content-title">{currentTemplate?.name ?? `Editor`}</h2>
+                        <Button onClick={open} color="mfgreen.8">Save</Button>
+                    </div>
                     <CodeMirror
                         ref={editorRef}
                         className="mjml-code-editor"
