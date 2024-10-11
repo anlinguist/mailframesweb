@@ -50,6 +50,11 @@ const tabs: Record<string, Tab> = {
     url: '/templates',
     protected: false,
   },
+  about: {
+    name: 'About',
+    url: '/about',
+    protected: false,
+  },
   // settings: {
   //   name: 'Settings',
   //   url: '/settings',

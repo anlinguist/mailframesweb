@@ -1,7 +1,7 @@
 // loaders.ts
 import { redirect } from 'react-router-dom';
 import { auth } from './services/firebase';
-import { collection, getDocs, getFirestore, query, where } from 'firebase/firestore';
+import { collection, doc, getDoc, getDocs, getFirestore, query, where } from 'firebase/firestore';
 import { User } from 'firebase/auth';
 
 export async function authLoader() {
@@ -50,4 +50,27 @@ export const templatesLoader = async (user: User | null) => {
   const userTemplates = templatesList.filter((template: any) => template.author !== 'default');
 
   return { mfTemplates, userTemplates };
+};
+
+
+export const aboutLoader = async () => {
+  const db = getFirestore();
+  
+  const privacyPolicyRef = doc(db, 'about', 'Privacy');
+  const termsOfServiceRef = doc(db, 'about', 'Terms');
+
+  // Fetch both documents
+  const [privacyDoc, tosDoc] = await Promise.all([
+    getDoc(privacyPolicyRef),
+    getDoc(termsOfServiceRef)
+  ]);
+
+  if (!privacyDoc.exists() || !tosDoc.exists()) {
+    throw new Error("Documents not found");
+  }
+
+  return {
+    privacy: privacyDoc.data().content,
+    terms: tosDoc.data().content
+  };
 };
