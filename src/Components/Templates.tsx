@@ -1,6 +1,6 @@
 import { useLoaderData } from 'react-router-dom';
 import TemplatePreviewCard from './TemplatePreviewCard';
-import { HoverCard, Tooltip } from '@mantine/core';
+import { HoverCard } from '@mantine/core';
 import { IconFlag3 } from "@tabler/icons-react";
 
 function Templates() {
