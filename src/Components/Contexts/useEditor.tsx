@@ -95,10 +95,10 @@ const initialContent = `<mjml>
           <mj-text color="#637381" font-size="16px">
             <ul>
               <li style="padding-bottom: 20px">
-                <strong>Save Templates:</strong> Save up to 10 templates in your account for easy access.
+                <strong>Save Templates:</strong> Save unlimited templates in your account for easy access.
               </li>
               <li style="padding-bottom: 20px">
-                <strong>Access AI Features:</strong> Get up to 4 AI-generated designs per day to boost your creativity.
+                <strong>Access AI Features:</strong> Get up to 10 AI-generated designs per day to boost your creativity.
               </li>
               <li>
                 <strong>Seamless Integration:</strong> Use our Chrome extension to inject your designs directly into your favorite email platforms.
