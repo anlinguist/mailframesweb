@@ -101,6 +101,16 @@ body {
   text-align: center;
 }
 
+.template-list .template-header.default {
+  display: flex;
+  justify-content: center;
+}
+
+.default svg {
+  margin-left: 10px;
+  cursor: pointer;
+}
+
 .template-item {
   margin: 20px;
   width: 300px;
