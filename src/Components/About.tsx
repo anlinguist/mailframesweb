@@ -26,7 +26,7 @@ const About = () => {
             location.search.includes(section.name)
         );
         if (sectionToScrollTo && sectionToScrollTo.ref.current) {
-            sectionToScrollTo.ref.current.scrollIntoView({ behavior: 'smooth' });
+            sectionToScrollTo.ref.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
         }
         const scrollTimeout = setTimeout(() => {
             console.log('Scrolling complete');
