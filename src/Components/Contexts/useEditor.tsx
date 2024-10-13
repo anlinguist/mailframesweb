@@ -105,16 +105,7 @@ const initialContent = `<mjml>
               </li>
             </ul>
           </mj-text>
-          <mj-button
-            background-color="#587752"
-            align="center"
-            color="#ffffff"
-            font-size="17px"
-            font-weight="bold"
-            href="https://mailframes.com/signup"
-          >
-            Sign Up for Free
-          </mj-button>
+            <mj-image href="https://chromewebstore.google.com/detail/mail-frames/olambjmjjieabplpdfdagmaghajpbbmg" width="150px" src="https://mailframes.com/availableinchrome.png"/>
           <mj-text color="#637381" font-size="16px" padding-top="30px">
             Ready to take your email design to the next level? Sign up today and start creating!
           </mj-text>
